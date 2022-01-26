@@ -4,7 +4,6 @@ using UnityEngine.Pool;
 
 public class ObstaclesSpawner : MonoBehaviour
 {
-    [SerializeField] private Obstacles _firstObstacle;
     [SerializeField] private Obstacles[] _obstaclePrefab;
     [SerializeField] private PlayerController _playerController;
     private ObjectPool<Obstacles> _pool;
@@ -16,19 +15,19 @@ public class ObstaclesSpawner : MonoBehaviour
     private void Awake()
     {
         _pool = new ObjectPool<Obstacles>(() => {
-            int rng = Random.Range(0,_obstaclePrefab.Length);
+            int rng = Random.Range(0, _obstaclePrefab.Length);
             return Instantiate(_obstaclePrefab[rng]);
 
         }, Obstacles => {
             Obstacles.gameObject.SetActive(true);
 
         }, Obstacles => {
-            Obstacles.gameObject.SetActive(true);
+            Obstacles.gameObject.SetActive(false);
 
         }, Obstacles => {
             Destroy(Obstacles.gameObject);
 
-        }, false, 10, 20);
+        }, false, _initialObstaclesCount, _initialObstaclesCount + _minObstaclesInFrontOfPlayer);
     }
     private void Start()
     {
@@ -81,7 +80,8 @@ public class ObstaclesSpawner : MonoBehaviour
         else
         {
             obstacle.transform.position = Vector3.zero;
-        } 
+            obstacle.DisablePipe();
+        }
         _obstaclesList.Add(obstacle);
         return obstacle;
     }
