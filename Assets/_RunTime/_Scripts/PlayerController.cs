@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     //animation
     [SerializeField] private Animator _PlayerAnimator;
     [SerializeField, Range(1,10)] private float _animationSpeed = 1;
+    //
+    private bool isDead = false;
 
     private void Update()
     {
@@ -25,11 +27,11 @@ public class PlayerController : MonoBehaviour
         transform.rotation = Quaternion.Euler(Vector3.forward * _rotationZ);
         transform.position += _velocity * Time.deltaTime;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !isDead)
         {
             _Jump();
         }
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && !isDead)
         {
             if (Input.GetTouch(0).phase.Equals(TouchPhase.Began))
             {
@@ -63,6 +65,17 @@ public class PlayerController : MonoBehaviour
         _velocity.y = _jumpForce;
         _rotationZ = _flapRoration;
         _PlayerAnimator.speed = _animationSpeed;
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log($"Trigger: {other.name} @DEATH!");
+        OnDeath();
+    }
+    private void OnDeath()
+    {
+        _forwardSpeed = 0;
+        _jumpForce = 0;
+        isDead = true;
     }
 }
 
