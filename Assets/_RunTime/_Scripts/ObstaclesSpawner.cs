@@ -4,8 +4,10 @@ using UnityEngine.Pool;
 
 public class ObstaclesSpawner : MonoBehaviour
 {
+    public delegate Vector3 TargetPosition();
+    public TargetPosition OnPositionChange;
+
     [SerializeField] private Obstacles[] _obstaclePrefab;
-    [SerializeField] private PlayerController _playerController;
     private ObjectPool<Obstacles> _pool;
     public List<Obstacles> _obstaclesList;
     //
@@ -41,7 +43,7 @@ public class ObstaclesSpawner : MonoBehaviour
 
     private void _UpdateObstacles()
     {
-        int playerIndex = _GetPlayerIndex();
+        int playerIndex = _GetTargetIndex();
         
         if (playerIndex < 0)
         {
@@ -86,13 +88,14 @@ public class ObstaclesSpawner : MonoBehaviour
         return obstacle;
     }
 
-    private int _GetPlayerIndex()
+    private int _GetTargetIndex()
     {
         for (int i = 0; i < _obstaclesList.Count; i++)
         {
+            Vector3 targetPosition = (Vector3)OnPositionChange?.Invoke();
             Obstacles instanceObstacle = _obstaclesList[i];
-            if (_playerController.transform.position.x >= instanceObstacle._startPoint.position.x + _minDistanceToConsiderInsideObstacle
-                && _playerController.transform.position.x <= instanceObstacle._endPoint.position.x)
+            if (targetPosition.x >= instanceObstacle._startPoint.position.x + _minDistanceToConsiderInsideObstacle
+                && targetPosition.x <= instanceObstacle._endPoint.position.x)
             {
                 return i;
             }

@@ -4,40 +4,45 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Vector3 _velocity;
+    public delegate void AnimatorHandler();
+    public event AnimatorHandler OnJumpAnimation, OnFallAnimation;
     [SerializeField] private float _forwardSpeed;
-    
     [Header("Gravity")]
     [SerializeField] private float _gravityScale;
     [SerializeField] private float _jumpForce;
+    private Vector3 _velocity;
+    private bool _isDead = false;
     //rotation
     private float _rotationZ;
     private float _rotationZSpeed = 90;
     private float _flapRoration = 30;
     private float _SeedToRoration => _jumpForce * 0.3f;
-    //animation
-    [SerializeField] private Animator _PlayerAnimator;
-    [SerializeField, Range(1,10)] private float _animationSpeed = 1;
     //
-    private bool isDead = false;
 
     private void Update()
     {
         _ProcessMovements();
+
         transform.rotation = Quaternion.Euler(Vector3.forward * _rotationZ);
         transform.position += _velocity * Time.deltaTime;
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        _OnDeath();
+    }
 
-        if (Input.GetMouseButtonDown(0) && !isDead)
+    public void OnTap()
+    {
+        if (!_isDead)
         {
-            _Jump();
+            _velocity.y = _jumpForce;
+            _rotationZ = _flapRoration;
+            OnJumpAnimation?.Invoke();
         }
-        if (Input.touchCount > 0 && !isDead)
-        {
-            if (Input.GetTouch(0).phase.Equals(TouchPhase.Began))
-            {
-                _Jump();
-            }
-        }
+    }
+    public Vector3 OnPositionChange()
+    {
+        return transform.position;
     }
 
     private void _ProcessMovements()
@@ -49,33 +54,14 @@ public class PlayerController : MonoBehaviour
             _rotationZ -= _rotationZSpeed * Time.deltaTime;
             _rotationZ = Mathf.Max(-90, _rotationZ);
 
-            _JumpAnimation();
+            OnFallAnimation?.Invoke();
         }
     }
-
-    private void _JumpAnimation()
-    {
-        float currentAnimationSpeed = _PlayerAnimator.speed;
-        currentAnimationSpeed -= _animationSpeed * Time.deltaTime;
-        _PlayerAnimator.speed = Mathf.Max(1, currentAnimationSpeed);
-    }
-
-    private void _Jump()
-    {
-        _velocity.y = _jumpForce;
-        _rotationZ = _flapRoration;
-        _PlayerAnimator.speed = _animationSpeed;
-    }
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        Debug.Log($"Trigger: {other.name} @DEATH!");
-        OnDeath();
-    }
-    private void OnDeath()
+    private void _OnDeath()
     {
         _forwardSpeed = 0;
         _jumpForce = 0;
-        isDead = true;
+        _isDead = true;
     }
 }
 
