@@ -5,7 +5,9 @@ using UnityEngine.Pool;
 public class ObstaclesSpawner : MonoBehaviour
 {
     public delegate Vector3 TargetPosition();
-    public TargetPosition OnPositionChange;
+    public event TargetPosition OnPositionChange;
+    public delegate void ObstacleClear();
+    public event ObstacleClear OnPassObstacle;
 
     [SerializeField] private Obstacles[] _obstaclePrefab;
     private ObjectPool<Obstacles> _pool;
@@ -24,6 +26,7 @@ public class ObstaclesSpawner : MonoBehaviour
             Obstacles.gameObject.SetActive(true);
 
         }, Obstacles => {
+            OnPassObstacle?.Invoke();
             Obstacles.gameObject.SetActive(false);
 
         }, Obstacles => {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Obstacles : MonoBehaviour
@@ -18,7 +16,7 @@ public class Obstacles : MonoBehaviour
         _pipes.SetActive(true);
         _ShamblesPipes();
     }
-
+    
     private void _ShamblesPipes()
     {
         int rngY = Random.Range(_minimumYposition,_maximumYposition);

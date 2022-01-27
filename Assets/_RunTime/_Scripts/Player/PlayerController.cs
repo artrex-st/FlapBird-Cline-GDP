@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -16,7 +14,7 @@ public class PlayerController : MonoBehaviour
     private float _rotationZ;
     private float _rotationZSpeed = 90;
     private float _flapRoration = 30;
-    private float _SeedToRoration => _jumpForce * 0.3f;
+    private float _SpeedToRorate => _jumpForce * 0.3f;
     //
 
     private void Update()
@@ -37,6 +35,7 @@ public class PlayerController : MonoBehaviour
         {
             _velocity.y = _jumpForce;
             _rotationZ = _flapRoration;
+            
             OnJumpAnimation?.Invoke();
         }
     }
@@ -49,7 +48,7 @@ public class PlayerController : MonoBehaviour
     {
         _velocity.x = _forwardSpeed;
         _velocity.y -= _gravityScale * Time.deltaTime;
-        if (_velocity.y < _SeedToRoration)
+        if (_velocity.y < _SpeedToRorate)
         {
             _rotationZ -= _rotationZSpeed * Time.deltaTime;
             _rotationZ = Mathf.Max(-90, _rotationZ);

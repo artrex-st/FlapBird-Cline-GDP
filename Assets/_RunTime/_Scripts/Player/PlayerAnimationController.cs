@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAnimationController : MonoBehaviour
@@ -9,7 +7,7 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void Start()
     {
-        _playerAnimator = _playerAnimator == null ? GetComponent<Animator>() : _playerAnimator;
+        _playerAnimator = _playerAnimator == null ? GetComponentInChildren<Animator>() : _playerAnimator;
     }
 
     public void OnJumpAnimation()
