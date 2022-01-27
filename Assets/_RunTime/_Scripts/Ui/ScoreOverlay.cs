@@ -1,16 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ScoreOverlay : MonoBehaviour
+public class ScoreOverlay : OverlayUI
 {
-    void Start()
+    public delegate void CallRetry();
+    public event CallRetry OnRetry;
+    private void OnEnable()
     {
-        
+        //GameStateManager.Instance.SetState(GameStates.GAME_SCORE);
     }
-
-    void Update()
+    public void BtnRestart()
     {
-        
+        OnRetry?.Invoke();
     }
 }

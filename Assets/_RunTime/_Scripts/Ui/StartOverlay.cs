@@ -1,20 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class StartOverlay : MonoBehaviour
-{
-    void Start()
+public class StartOverlay : OverlayUI
+{   
+    private void Awake()
     {
-        
+        GetHudController();
     }
-
-    void Update()
+    private void OnEnable()
     {
-        
+        GameStateManager.Instance.SetState(GameStates.GAME_PAUSED);
     }
-    public void SetActive(bool active)
+    public void BtnTapToStart()
     {
-        gameObject.SetActive(active);
+        hudController.OpenMenu(Menu.MAIN, gameObject);
     }
 }

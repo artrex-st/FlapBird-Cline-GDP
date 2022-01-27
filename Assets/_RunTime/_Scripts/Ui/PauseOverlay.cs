@@ -1,16 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PauseOverlay : MonoBehaviour
+public class PauseOverlay : OverlayUI
 {
-    void Start()
+    private void OnEnable()
     {
-        
+        GameStateManager.Instance.SetState(GameStates.GAME_PAUSED);
     }
-
-    void Update()
+    public void BtnResume()
     {
-        
+        hudController.OpenMenu(Menu.MAIN, gameObject);
     }
 }

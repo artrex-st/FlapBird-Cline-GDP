@@ -1,7 +1,9 @@
 public enum GameStates
 {
     GAME_RUNNING,
-    GAME_PAUSED
+    GAME_PAUSED,
+    GAME_SCORE,
+    GAME_WAITING
 }
 public enum Menu
 {

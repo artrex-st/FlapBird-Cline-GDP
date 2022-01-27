@@ -1,66 +1,83 @@
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     public delegate void AnimatorHandler();
     public event AnimatorHandler OnJumpAnimation, OnFallAnimation;
-    [SerializeField] private float _forwardSpeed;
-    [Header("Gravity")]
-    [SerializeField] private float _gravityScale;
-    [SerializeField] private float _jumpForce;
+    public delegate void PlayerHitEventHandler(Collider2D hited);
+    public event PlayerHitEventHandler OnPlayerHit;
+
+    [SerializeField] private GameConfig _playerConfig;
     private Vector3 _velocity;
-    private bool _isDead = false;
-    //rotation
     private float _rotationZ;
-    private float _rotationZSpeed = 90;
-    private float _flapRoration = 30;
-    private float _SpeedToRorate => _jumpForce * 0.3f;
-    //
+    private float _SpeedToRorate => _playerConfig.JumpForce * 0.3f;
+    private bool _IsRunning;
+    public void OnCallConfig(GameConfig config)
+    {
+        _playerConfig = config;
+    }
+
+    private void Start()
+    {
+        GameStateManager.Instance.OnGameStateChanged += OnGameStateChanged;
+    }
+
+    private void OnGameStateChanged(GameStates newGameState)
+    {
+        switch (newGameState)
+        {
+            case GameStates.GAME_RUNNING:
+                _IsRunning = true;
+                break;
+            case GameStates.GAME_PAUSED:
+                _IsRunning = false;
+                break;
+            case GameStates.GAME_SCORE:
+                _IsRunning = true;
+                break;
+            default:
+                break;
+        }
+    }
 
     private void Update()
     {
         _ProcessMovements();
-
-        transform.rotation = Quaternion.Euler(Vector3.forward * _rotationZ);
-        transform.position += _velocity * Time.deltaTime;
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        _OnDeath();
+        OnPlayerHit?.Invoke(other);
     }
 
     public void OnTap()
     {
-        if (!_isDead)
-        {
-            _velocity.y = _jumpForce;
-            _rotationZ = _flapRoration;
+        _velocity.y = _playerConfig.JumpForce;
+        _rotationZ = _playerConfig.FlapRoration;
             
-            OnJumpAnimation?.Invoke();
-        }
+        OnJumpAnimation?.Invoke();
     }
     public Vector3 OnPositionChange()
     {
         return transform.position;
     }
-
     private void _ProcessMovements()
     {
-        _velocity.x = _forwardSpeed;
-        _velocity.y -= _gravityScale * Time.deltaTime;
-        if (_velocity.y < _SpeedToRorate)
+        if (_IsRunning)
         {
-            _rotationZ -= _rotationZSpeed * Time.deltaTime;
-            _rotationZ = Mathf.Max(-90, _rotationZ);
+            _velocity.x = _playerConfig.ForwardSpeed;
+            _velocity.y -= _playerConfig.GravityScale * Time.deltaTime;
+            if (_velocity.y < _SpeedToRorate)
+            {
+                _rotationZ -= _playerConfig.RotationZSpeed * Time.deltaTime;
+                _rotationZ = Mathf.Max(-90, _rotationZ);
 
-            OnFallAnimation?.Invoke();
+                OnFallAnimation?.Invoke();
+            }
+
+            transform.rotation = Quaternion.Euler(Vector3.forward * _rotationZ);
+            transform.position += _velocity * Time.deltaTime;
         }
-    }
-    private void _OnDeath()
-    {
-        _forwardSpeed = 0;
-        _jumpForce = 0;
-        _isDead = true;
     }
 }
 

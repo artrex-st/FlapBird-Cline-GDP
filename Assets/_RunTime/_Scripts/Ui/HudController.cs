@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class HudController : MonoBehaviour
 {
+
     private GameObject _lastMenu;
-    [SerializeField] private GameObject _startOverlay;
-    [SerializeField] private GameObject _mainOverlay;
-    [SerializeField] private GameObject _pauseOverlay;
-    [SerializeField] private GameObject _gameOverOverlay;
+    [SerializeField] private GameObject _startOverlay, _mainOverlay, _pauseOverlay, _gameOverOverlay;
+
     private void Awake()
     {
         _startOverlay.SetActive(true);
@@ -15,6 +14,7 @@ public class HudController : MonoBehaviour
         _pauseOverlay.SetActive(false);
         _gameOverOverlay.SetActive(false);
     }
+
     public void OpenMenu(Menu menuOpened, GameObject callingMenu)
     {
         switch (menuOpened)
