@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public event PlayerHitEventHandler OnPlayerHit;
 
     [SerializeField] private GameConfig _playerConfig;
-    private Vector3 _velocity;
+    [SerializeField]private Vector3 _velocity;
     private float _rotationZ;
     private float _SpeedToRorate => _playerConfig.JumpForce * 0.3f;
     private bool _IsRunning;
@@ -17,8 +17,7 @@ public class PlayerController : MonoBehaviour
     {
         _playerConfig = config;
     }
-
-    private void Start()
+    private void Awake()
     {
         GameStateManager.Instance.OnGameStateChanged += OnGameStateChanged;
     }
@@ -35,6 +34,11 @@ public class PlayerController : MonoBehaviour
                 break;
             case GameStates.GAME_SCORE:
                 _IsRunning = true;
+                break;
+            case GameStates.GAME_WAITING:
+                _velocity.y = _playerConfig.JumpForce;
+                _rotationZ = _playerConfig.FlapRoration;
+                _IsRunning = false;
                 break;
             default:
                 break;
@@ -54,7 +58,7 @@ public class PlayerController : MonoBehaviour
     {
         _velocity.y = _playerConfig.JumpForce;
         _rotationZ = _playerConfig.FlapRoration;
-            
+        
         OnJumpAnimation?.Invoke();
     }
     public Vector3 OnPositionChange()

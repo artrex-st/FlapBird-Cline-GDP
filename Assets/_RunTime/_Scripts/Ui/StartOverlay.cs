@@ -6,9 +6,9 @@ public class StartOverlay : OverlayUI
     {
         GetHudController();
     }
-    private void OnEnable()
+    private void Start()
     {
-        GameStateManager.Instance.SetState(GameStates.GAME_PAUSED);
+        GameStateManager.Instance.SetState(GameStates.GAME_WAITING);
     }
     public void BtnTapToStart()
     {

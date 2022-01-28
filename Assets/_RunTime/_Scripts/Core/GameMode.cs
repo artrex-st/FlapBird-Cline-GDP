@@ -9,7 +9,7 @@ public class GameMode : MonoBehaviour
     public event GetGameScore OnScoreReturn;
 
     [SerializeField] private int _score = 0;
-    [SerializeField] private GameConfig _gameRuning, _gamePaused, _gameScore;
+    [SerializeField] private GameConfig _gameRuning, _gamePaused, _gameScore, _gameWaiting;
     
     public void OnPassObstacle()
     {
@@ -49,6 +49,10 @@ public class GameMode : MonoBehaviour
             case GameStates.GAME_SCORE:
                 Debug.Log("Score");
                 OnCallConfig?.Invoke(_gameScore);
+                break;
+            case GameStates.GAME_WAITING:
+                Debug.Log("Waiting");
+                OnCallConfig?.Invoke(_gameWaiting);
                 break;
             default:
                 break;

@@ -829,6 +829,7 @@ MonoBehaviour:
   _gameRuning: {fileID: 11400000, guid: 0b7bb16d32618be44becc5e5be5710f5, type: 2}
   _gamePaused: {fileID: 11400000, guid: 091e8cc7dc2d1804d988a0d9a5d71bd1, type: 2}
   _gameScore: {fileID: 11400000, guid: b0f646c9e2fa00048974d672260aff77, type: 2}
+  _gameWaiting: {fileID: 11400000, guid: 9363bb94789364846a8b2c20c65b2ee7, type: 2}
 --- !u!1 &386876575
 GameObject:
   m_ObjectHideFlags: 0
@@ -1574,7 +1575,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1209518000
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1988,6 +1989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerConfig: {fileID: 0}
+  _velocity: {x: 0, y: 0, z: 0}
 --- !u!58 &1942410577
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2001,9 +2003,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.029827237, y: -0.024234653}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.40119725
 --- !u!50 &1942410578
 Rigidbody2D:
   serializedVersion: 4
