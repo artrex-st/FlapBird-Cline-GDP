@@ -1,0 +1,56 @@
+{
+    "name": "NewInputAction",
+    "maps": [
+        {
+            "name": "PlayerBird",
+            "id": "a68c4322-a103-4337-af9c-bea810697576",
+            "actions": [
+                {
+                    "name": "Tap",
+                    "type": "PassThrough",
+                    "id": "754a84bb-6424-4620-b978-d50b890edbe8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(pressPoint=0.08)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "46f92246-d96c-4a9a-a647-fc3b48e1b6f0",
+                    "path": "<Touchscreen>/primaryTouch/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2bac9c90-92eb-49da-8d6d-f6ece525440a",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "14ce76c7-1aea-4815-b3da-0d95085b770f",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
