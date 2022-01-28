@@ -82,6 +82,10 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(Vector3.forward * _rotationZ);
             transform.position += _velocity * Time.deltaTime;
         }
+        else
+        {
+            transform.position = (Vector3.up * 0.2f) * Mathf.Sin(8 * Time.time);
+        }
     }
 }
 

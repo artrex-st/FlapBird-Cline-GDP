@@ -14,7 +14,7 @@ public class ObstaclesSpawner : MonoBehaviour
     public List<Obstacles> _obstaclesList;
     //
     [SerializeField] private float _minDistanceToConsiderInsideObstacle;
-    [SerializeField] private int _initialObstaclesCount, _minObstaclesInFrontOfPlayer;
+    [SerializeField] private int _minObstaclesInFrontOfPlayer;
 
     private void Awake()
     {
@@ -26,17 +26,16 @@ public class ObstaclesSpawner : MonoBehaviour
             Obstacles.gameObject.SetActive(true);
 
         }, Obstacles => {
-            OnPassObstacle?.Invoke();
             Obstacles.gameObject.SetActive(false);
 
         }, Obstacles => {
             Destroy(Obstacles.gameObject);
 
-        }, false, _initialObstaclesCount, _initialObstaclesCount + _minObstaclesInFrontOfPlayer);
+        }, false, _minObstaclesInFrontOfPlayer, _minObstaclesInFrontOfPlayer);
     }
     private void Start()
     {
-        _SpawnObstacles(_initialObstaclesCount);
+        _SpawnObstacles(_minObstaclesInFrontOfPlayer);
     }
     
     private void Update()
@@ -60,6 +59,10 @@ public class ObstaclesSpawner : MonoBehaviour
 
         for (int i = 0; i < playerIndex; i++)
         {
+            if (_obstaclesList[i+1].IsActiveObstacle)
+            {
+                OnPassObstacle?.Invoke();
+            }
             _pool.Release(_obstaclesList[i]);
         }
         _obstaclesList.RemoveRange(0, playerIndex);
@@ -85,6 +88,10 @@ public class ObstaclesSpawner : MonoBehaviour
         else
         {
             obstacle.transform.position = Vector3.zero;
+            obstacle.DisablePipe();
+        }
+        if (GameStateManager.Instance.CurrentGameState.Equals(GameStates.GAME_WAITING))
+        {
             obstacle.DisablePipe();
         }
         _obstaclesList.Add(obstacle);

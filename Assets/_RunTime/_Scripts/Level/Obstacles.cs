@@ -6,6 +6,7 @@ public class Obstacles : MonoBehaviour
     [SerializeField] public Transform _startPoint, _endPoint;
     [SerializeField] private int _minimumYposition = -2;
     [SerializeField] private int _maximumYposition = 3;
+    public bool IsActiveObstacle => _pipes.activeInHierarchy;
 
     public void DisablePipe()
     {
@@ -16,7 +17,14 @@ public class Obstacles : MonoBehaviour
         _pipes.SetActive(true);
         _ShamblesPipes();
     }
-    
+    private void Update()
+    {
+        if (GameStateManager.Instance.CurrentGameState.Equals(GameStates.GAME_WAITING))
+        {
+            transform.position += Vector3.left * Time.deltaTime;
+        }
+    }
+
     private void _ShamblesPipes()
     {
         int rngY = Random.Range(_minimumYposition,_maximumYposition);
