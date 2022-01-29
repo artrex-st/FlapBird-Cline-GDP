@@ -1911,9 +1911,8 @@ MonoBehaviour:
   - {fileID: 7215107436457372246, guid: d3ad54e3c307c7341bf40b966a701cd5, type: 3}
   - {fileID: 8315707717551738619, guid: 19f0d55d109627f41bd02b5459f9eb62, type: 3}
   _obstaclesList: []
-  _minDistanceToConsiderInsideObstacle: 5
-  _initialObstaclesCount: 5
-  _minObstaclesInFrontOfPlayer: 3
+  _minDistanceToConsiderInsideObstacle: 4
+  _minObstaclesInFrontOfPlayer: 2
 --- !u!4 &1886468331
 Transform:
   m_ObjectHideFlags: 0

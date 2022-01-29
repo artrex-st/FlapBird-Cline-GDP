@@ -38,7 +38,6 @@ public class PlayerInput : MonoBehaviour
     }
     private void ProcessInput()
     {
-        Debug.Log("INput");
         if (_unlockInputs)
         {
             OnTap?.Invoke();

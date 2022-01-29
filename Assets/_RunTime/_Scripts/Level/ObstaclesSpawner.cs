@@ -59,7 +59,7 @@ public class ObstaclesSpawner : MonoBehaviour
 
         for (int i = 0; i < playerIndex; i++)
         {
-            if (_obstaclesList[i+1].IsActiveObstacle)
+            if (_obstaclesList[i + 1].IsActiveObstacle)
             {
                 OnPassObstacle?.Invoke();
             }
