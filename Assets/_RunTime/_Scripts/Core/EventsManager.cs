@@ -24,6 +24,8 @@ public class EventsManager : MonoBehaviour
         //ui
         _gameMode.OnScoreReturn += _mainOverlay.OnScoreReturn;
         _scoreOverlay.OnRetry += _gameMode.OnRetry;
+        _scoreOverlay.OnQuit += _gameMode.OnQuit;
+        _gameMode.OnMedalsReturn += _scoreOverlay.OnMedalsReturn;
     }
     
     private void OnDestroy()
@@ -41,5 +43,7 @@ public class EventsManager : MonoBehaviour
         //ui
         _gameMode.OnScoreReturn -= _mainOverlay.OnScoreReturn;
         _scoreOverlay.OnRetry -= _gameMode.OnRetry;
+        _scoreOverlay.OnQuit -= _gameMode.OnQuit;
+        _gameMode.OnMedalsReturn -= _scoreOverlay.OnMedalsReturn;
     }
 }

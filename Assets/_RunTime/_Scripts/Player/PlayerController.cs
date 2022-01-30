@@ -12,39 +12,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]private Vector3 _velocity;
     private float _rotationZ;
     private float _SpeedToRorate => _playerConfig.JumpForce * 0.3f;
-    private bool _IsRunning;
     public void OnCallConfig(GameConfig config)
     {
         _playerConfig = config;
     }
-    private void Awake()
-    {
-        GameStateManager.Instance.OnGameStateChanged += OnGameStateChanged;
-    }
-
-    private void OnGameStateChanged(GameStates newGameState)
-    {
-        switch (newGameState)
-        {
-            case GameStates.GAME_RUNNING:
-                _IsRunning = true;
-                break;
-            case GameStates.GAME_PAUSED:
-                _IsRunning = false;
-                break;
-            case GameStates.GAME_SCORE:
-                _IsRunning = true;
-                break;
-            case GameStates.GAME_WAITING:
-                _velocity.y = _playerConfig.JumpForce;
-                _rotationZ = _playerConfig.FlapRoration;
-                _IsRunning = false;
-                break;
-            default:
-                break;
-        }
-    }
-
     private void Update()
     {
         _ProcessMovements();
@@ -67,10 +38,11 @@ public class PlayerController : MonoBehaviour
     }
     private void _ProcessMovements()
     {
-        if (_IsRunning)
+        if (GameStateManager.Instance.CurrentGameState.Equals(GameStates.GAME_RUNNING) || GameStateManager.Instance.CurrentGameState.Equals(GameStates.GAME_SCORE))
         {
             _velocity.x = _playerConfig.ForwardSpeed;
             _velocity.y -= _playerConfig.GravityScale * Time.deltaTime;
+            
             if (_velocity.y < _SpeedToRorate)
             {
                 _rotationZ -= _playerConfig.RotationZSpeed * Time.deltaTime;
@@ -78,12 +50,15 @@ public class PlayerController : MonoBehaviour
 
                 OnFallAnimation?.Invoke();
             }
-
             transform.rotation = Quaternion.Euler(Vector3.forward * _rotationZ);
             transform.position += _velocity * Time.deltaTime;
+            return;
         }
-        else
+        
+        if(GameStateManager.Instance.CurrentGameState.Equals(GameStates.GAME_WAITING))
         {
+            _velocity.y = _playerConfig.JumpForce;
+            _rotationZ = _playerConfig.FlapRoration;
             transform.position = (Vector3.up * 0.2f) * Mathf.Sin(8 * Time.time);
         }
     }

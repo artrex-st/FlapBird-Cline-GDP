@@ -1,16 +1,21 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+public class Scores
+{
+    public int gold, silver, bronze, iron, lastScore;
+}
+
 public class GameMode : MonoBehaviour
 {
-    public struct Scores
-    {
-        public int gold, silver, bronze, lastScore;
-    }
     public delegate void GetGameConfig(GameConfig config);
     public event GetGameConfig OnCallConfig;
     public delegate void GetGameScore(int score);
     public event GetGameScore OnScoreReturn;
+    //
+    public delegate void GetGameMedals(Scores scores, bool newScore, int medalIndex, bool record);
+    public event GetGameMedals OnMedalsReturn;
 
     public const string scoreDataFileName = "Scores";
     private Scores _scores = new Scores();
@@ -31,6 +36,16 @@ public class GameMode : MonoBehaviour
     public void OnRetry()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void OnQuit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_WEBGL
+        Debug.Log("'WebGL Player' cannot be closed");
+#else
+        Application.Quit();
+#endif
     }
 
     private void Awake()
@@ -79,6 +94,7 @@ public class GameMode : MonoBehaviour
         _CalcMedals();
         string jsonString = JsonUtility.ToJson(_scores);
         SaveSystem.Save(jsonString,scoreDataFileName);
+
     }
 
     private void _CalcMedals()
@@ -87,28 +103,45 @@ public class GameMode : MonoBehaviour
         {
             if (_currentScore != _scores.gold)
             {
+                _scores.iron = _scores.bronze;
                 _scores.bronze = _scores.silver;
                 _scores.silver = _scores.gold;
                 _scores.gold = _currentScore;
-                Debug.Log("Melhor que gold");
             }
+            _scores.lastScore = _currentScore;
+            OnMedalsReturn?.Invoke(_scores, true, 3, true);
         }
         else if (_currentScore >= _scores.silver)
         {
             if (_currentScore != _scores.silver)
             {
+                _scores.iron = _scores.bronze;
                 _scores.bronze = _scores.silver;
                 _scores.silver = _currentScore;
-                Debug.Log("Melhor que silver");
             }
+            _scores.lastScore = _currentScore;
+            OnMedalsReturn?.Invoke(_scores, true, 2, false);
         }
         else if (_currentScore >= _scores.bronze)
         {
-            _scores.bronze = _currentScore;
-            Debug.Log("Melhor que bronze");
+            if (_currentScore != _scores.silver)
+            {
+                _scores.iron = _scores.bronze;
+                _scores.bronze = _currentScore;
+            }
+            _scores.lastScore = _currentScore;
+            OnMedalsReturn?.Invoke(_scores, true, 1, false);
         }
-        _scores.lastScore = _currentScore;
-        Debug.Log("Last Score");
-
+        else if(_currentScore >= _scores.iron)
+        {
+            _scores.iron = _currentScore;
+            _scores.lastScore = _currentScore;
+            OnMedalsReturn?.Invoke(_scores, true, 0, false);
+        }
+        else
+        {
+            _scores.lastScore = _currentScore;
+            OnMedalsReturn?.Invoke(_scores, false, 0, false);
+        }
     }
 }
