@@ -15,7 +15,7 @@ public class PlayerInput : MonoBehaviour
     {
         GameStateManager.Instance.OnGameStateChanged += OnGameStateChanged;
         _playerControls = new NewInputAction();
-        _playerControls.PlayerBird.Tap.started += ctx => ProcessInput();
+        
     }
     private void OnEnable()
     {
@@ -29,19 +29,16 @@ public class PlayerInput : MonoBehaviour
     {
         if (newGameState.Equals(GameStates.GAME_RUNNING))
         {
-            _unlockInputs = true;
+            _playerControls.PlayerBird.Tap.started += ctx => ProcessInput();
         }
         else
         {
-            _unlockInputs = false;
+            _playerControls.PlayerBird.Tap.started -= ctx => ProcessInput();
         }
     }
     private void ProcessInput()
     {
-        if (_unlockInputs)
-        {
-            OnTap?.Invoke();
-        }
+        OnTap?.Invoke();
     }
     
 }
