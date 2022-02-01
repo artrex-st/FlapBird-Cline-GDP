@@ -3,9 +3,13 @@ using UnityEngine;
 public class EventsManager : MonoBehaviour
 {
     [SerializeField] private GameMode _gameMode;
+
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private PlayerAnimationController _playerAnimationController;
+    [SerializeField] private PlayerSound _playerSound;
+    
+    
     [SerializeField] private ObstaclesSpawner _obstaclesSpawner;
 
     [SerializeField] private MainOverlay _mainOverlay;
@@ -19,8 +23,13 @@ public class EventsManager : MonoBehaviour
         _playerInput.OnTap += _playerController.OnTap;
         _playerController.OnPlayerHit += _gameMode.OnPlayerHit;
 
-        _playerController.OnJumpAnimation += _playerAnimationController.OnJumpAnimation;
-        _playerController.OnFallAnimation += _playerAnimationController.OnFallAnimation;
+        _playerController.OnFlap += _playerAnimationController.OnJumpAnimation;
+        _playerController.OnFall += _playerAnimationController.OnFallAnimation;
+        
+        //sound
+        _playerController.OnFlap += _playerSound.OnFlapSound;
+        _playerController.OnPlayerHit += _playerSound.OnSoundHitCall;
+        
         //ui
         _gameMode.OnScoreReturn += _mainOverlay.OnScoreReturn;
         _scoreOverlay.OnRetry += _gameMode.OnRetry;
@@ -37,8 +46,12 @@ public class EventsManager : MonoBehaviour
         _playerInput.OnTap -= _playerController.OnTap;
         _playerController.OnPlayerHit -= _gameMode.OnPlayerHit;
 
-        _playerController.OnJumpAnimation -= _playerAnimationController.OnJumpAnimation;
-        _playerController.OnFallAnimation -= _playerAnimationController.OnFallAnimation;
+        _playerController.OnFlap -= _playerAnimationController.OnJumpAnimation;
+        _playerController.OnFall -= _playerAnimationController.OnFallAnimation;
+        
+        // sound
+        _playerController.OnFlap -= _playerSound.OnFlapSound;
+        _playerController.OnPlayerHit -= _playerSound.OnSoundHitCall;
         
         //ui
         _gameMode.OnScoreReturn -= _mainOverlay.OnScoreReturn;

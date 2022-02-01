@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public delegate void AnimatorHandler();
-    public event AnimatorHandler OnJumpAnimation, OnFallAnimation;
+    public event AnimatorHandler OnFlap, OnFall;
     public delegate void PlayerHitEventHandler(Collider2D hited);
     public event PlayerHitEventHandler OnPlayerHit;
 
@@ -12,25 +12,45 @@ public class PlayerController : MonoBehaviour
     [SerializeField]private Vector3 _velocity;
     private float _rotationZ;
     private float _SpeedToRorate => _playerConfig.JumpForce * 0.3f;
+    private GameStates _laststate;
     public void OnCallConfig(GameConfig config)
     {
         _playerConfig = config;
     }
+    private void Awake()
+    {
+        GameStateManager.Instance.OnGameStateChanged += _OnGameStateChanged;
+        _laststate = GameStateManager.Instance.CurrentGameState;
+    }
+
     private void Update()
     {
         _ProcessMovements();
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        OnPlayerHit?.Invoke(other);
+        if (_laststate.Equals(GameStates.GAME_RUNNING))
+        {
+            OnPlayerHit?.Invoke(other);
+        }
     }
 
+    private void _OnGameStateChanged(GameStates newGameState)
+    {
+        if (_laststate.Equals(GameStates.GAME_WAITING) && newGameState.Equals(GameStates.GAME_RUNNING))
+        {
+            OnTap();
+        }
+        _laststate = newGameState;
+    }
     public void OnTap()
     {
-        _velocity.y = _playerConfig.JumpForce;
-        _rotationZ = _playerConfig.FlapRoration;
-        
-        OnJumpAnimation?.Invoke();
+        if (GameStateManager.Instance.CurrentGameState.Equals(GameStates.GAME_RUNNING))
+        {
+            _velocity.y = _playerConfig.JumpForce;
+            _rotationZ = _playerConfig.FlapRoration;
+            OnFlap?.Invoke();
+        }
     }
     public Vector3 OnPositionChange()
     {
@@ -48,7 +68,7 @@ public class PlayerController : MonoBehaviour
                 _rotationZ -= _playerConfig.RotationZSpeed * Time.deltaTime;
                 _rotationZ = Mathf.Max(-90, _rotationZ);
 
-                OnFallAnimation?.Invoke();
+                OnFall?.Invoke();
             }
             transform.rotation = Quaternion.Euler(Vector3.forward * _rotationZ);
             transform.position += _velocity * Time.deltaTime;
@@ -57,8 +77,6 @@ public class PlayerController : MonoBehaviour
         
         if(GameStateManager.Instance.CurrentGameState.Equals(GameStates.GAME_WAITING))
         {
-            _velocity.y = _playerConfig.JumpForce;
-            _rotationZ = _playerConfig.FlapRoration;
             transform.position = (Vector3.up * 0.2f) * Mathf.Sin(8 * Time.time);
         }
     }
