@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerSound : MonoBehaviour
@@ -14,13 +12,7 @@ public class PlayerSound : MonoBehaviour
     }
     public void OnSoundHitCall(Collider2D hit)
     {
-        if (hit.TryGetComponent(out Obstacles hitAudioSource))
-        {
-            hitAudioSource.HitSound();
-            return;
-        }
         _playerAudioSource.PlayOneShot(_pipeHit);
-        Debug.Log("Player");
     }
     private void Awake()
     {

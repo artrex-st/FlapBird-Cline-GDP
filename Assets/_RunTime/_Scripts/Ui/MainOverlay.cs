@@ -19,7 +19,6 @@ public class MainOverlay : OverlayUI
         if (newGameState.Equals(GameStates.GAME_SCORE))
         {
             hudController.OpenMenu(Menu.SCORE, gameObject);
-            Debug.Log("Score call");
         }
     }
 
