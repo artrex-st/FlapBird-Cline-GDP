@@ -13,7 +13,6 @@ public class GameMode : MonoBehaviour
     public event GetGameConfig OnCallConfig;
     public delegate void GetGameScore(int score);
     public event GetGameScore OnScoreReturn;
-    //
     public delegate void GetGameMedals(Scores scores, bool newScore, int medalIndex, bool record);
     public event GetGameMedals OnMedalsReturn;
 
@@ -110,8 +109,10 @@ public class GameMode : MonoBehaviour
             }
             _scores.lastScore = _currentScore;
             OnMedalsReturn?.Invoke(_scores, true, 3, true);
+            return;
         }
-        else if (_currentScore >= _scores.silver)
+        
+        if (_currentScore >= _scores.silver)
         {
             if (_currentScore != _scores.silver)
             {
@@ -121,8 +122,10 @@ public class GameMode : MonoBehaviour
             }
             _scores.lastScore = _currentScore;
             OnMedalsReturn?.Invoke(_scores, true, 2, false);
+            return;
         }
-        else if (_currentScore >= _scores.bronze)
+        
+        if (_currentScore >= _scores.bronze)
         {
             if (_currentScore != _scores.silver)
             {
@@ -131,17 +134,17 @@ public class GameMode : MonoBehaviour
             }
             _scores.lastScore = _currentScore;
             OnMedalsReturn?.Invoke(_scores, true, 1, false);
+            return;
         }
-        else if(_currentScore >= _scores.iron)
+        
+        if(_currentScore >= _scores.iron)
         {
             _scores.iron = _currentScore;
             _scores.lastScore = _currentScore;
             OnMedalsReturn?.Invoke(_scores, true, 0, false);
+            return;
         }
-        else
-        {
-            _scores.lastScore = _currentScore;
-            OnMedalsReturn?.Invoke(_scores, false, 0, false);
-        }
+        _scores.lastScore = _currentScore;
+        OnMedalsReturn?.Invoke(_scores, false, 0, false); 
     }
 }
