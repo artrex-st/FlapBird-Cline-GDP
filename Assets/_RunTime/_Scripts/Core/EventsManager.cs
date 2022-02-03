@@ -9,10 +9,8 @@ public class EventsManager : MonoBehaviour
     [SerializeField] private PlayerAnimationController _playerAnimationController;
     [SerializeField] private PlayerSound _playerSound;
     
-    
-    [SerializeField] private ObstaclesSpawner _obstaclesSpawner;
-
     [SerializeField] private HudController _hudController;
+    [SerializeField] private ObstaclesSpawner _obstaclesSpawner;
     [SerializeField] private HudSoundController _hudSoundController;
     [SerializeField] private MainOverlay _mainOverlay;
     [SerializeField] private ScoreOverlay _scoreOverlay;
@@ -37,7 +35,9 @@ public class EventsManager : MonoBehaviour
         _scoreOverlay.OnRetry += _gameMode.OnRetry;
         _scoreOverlay.OnQuit += _gameMode.OnQuit;
         _gameMode.OnMedalsReturn += _scoreOverlay.OnMedalsReturn;
+        
         _hudController.OnButtonPress += _hudSoundController.OnButtonPress;
+        _hudController.OnScoreUp += _hudSoundController.OnScoreUp;
     }
     
     private void OnDestroy()
@@ -61,6 +61,9 @@ public class EventsManager : MonoBehaviour
         _scoreOverlay.OnRetry -= _gameMode.OnRetry;
         _scoreOverlay.OnQuit -= _gameMode.OnQuit;
         _gameMode.OnMedalsReturn -= _scoreOverlay.OnMedalsReturn;
+
         _hudController.OnButtonPress -= _hudSoundController.OnButtonPress;
+        _hudController.OnScoreUp -= _hudSoundController.OnScoreUp;
+
     }
 }

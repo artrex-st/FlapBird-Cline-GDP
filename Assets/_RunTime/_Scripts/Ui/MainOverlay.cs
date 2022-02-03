@@ -29,10 +29,13 @@ public class MainOverlay : OverlayUI
     public void BtnPause()
     {
         hudController.OpenMenu(Menu.PAUSE, gameObject);
+        hudController.InvokePressButton();
+
     }
     public void OnScoreReturn(int score)
     {
         _scoreText.text = $"{score}";
+        hudController.InvokeScoreUp();
     }
 
 }

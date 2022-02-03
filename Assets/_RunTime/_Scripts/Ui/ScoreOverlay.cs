@@ -6,14 +6,12 @@ public class ScoreOverlay : OverlayUI
 {
     public delegate void CallRetry();
     public event CallRetry OnRetry, OnQuit;
+
     [SerializeField] private Image _medalIcon;
     [SerializeField] private Sprite[] _medals;
     [SerializeField] private GameObject _newTag;
     [SerializeField] private TextMeshProUGUI _scoreText, _bestText;
-    private void OnEnable()
-    {
-        //GameStateManager.Instance.SetState(GameStates.GAME_SCORE);
-    }
+
     public void OnMedalsReturn(Scores scores, bool newScore, int medalIndex, bool record)
     {
         _scoreText.text = $"{scores.lastScore}";
@@ -24,10 +22,12 @@ public class ScoreOverlay : OverlayUI
     }
     public void BtnRestart()
     {
+        hudController.InvokePressButton();
         OnRetry?.Invoke();
     }
     public void BtnQuit()
     {
+        hudController.InvokePressButton();
         OnQuit?.Invoke();
     }
 }

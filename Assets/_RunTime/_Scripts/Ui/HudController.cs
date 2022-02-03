@@ -3,14 +3,13 @@ using UnityEngine;
 public class HudController : MonoBehaviour
 {
     public delegate void HudSoundHandler();
-    public event HudSoundHandler OnButtonPress;
+    public event HudSoundHandler OnButtonPress, OnScoreUp;
     private GameObject _lastMenu;
     [SerializeField] private GameObject _startOverlay, _mainOverlay, _pauseOverlay, _gameOverOverlay;
 
     private void Awake()
     {
         _startOverlay.SetActive(true);
-        OnButtonPress?.Invoke();
         _mainOverlay.SetActive(false);
         _pauseOverlay.SetActive(false);
         _gameOverOverlay.SetActive(false);
@@ -38,8 +37,15 @@ public class HudController : MonoBehaviour
             default:
                 break;
         }
-        OnButtonPress?.Invoke();
         _lastMenu = callingMenu;
         callingMenu.SetActive(false);
+    }
+    public void InvokePressButton()
+    {
+        OnButtonPress?.Invoke();
+    }
+    public void InvokeScoreUp()
+    {
+        OnScoreUp?.Invoke();
     }
 }

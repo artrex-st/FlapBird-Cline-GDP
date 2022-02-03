@@ -340,8 +340,8 @@ MonoBehaviour:
   _playerInput: {fileID: 1942410579}
   _playerAnimationController: {fileID: 1942410580}
   _playerSound: {fileID: 1366927980}
-  _obstaclesSpawner: {fileID: 1886468330}
   _hudController: {fileID: 846001457}
+  _obstaclesSpawner: {fileID: 1886468330}
   _hudSoundController: {fileID: 846001459}
   _mainOverlay: {fileID: 786247632}
   _scoreOverlay: {fileID: 2064174487}
@@ -1567,6 +1567,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hudAudioSource: {fileID: 846001458}
   _buttonAudioClip: {fileID: 8300000, guid: 93ca22f26084d9a48a10e0b0475dafea, type: 3}
+  _scoreUpSound: {fileID: 8300000, guid: 27a9af320cc0ae5489caaaf8cb6ffdb3, type: 3}
 --- !u!1 &865004311
 GameObject:
   m_ObjectHideFlags: 0
